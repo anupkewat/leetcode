@@ -1,18 +1,21 @@
 class Solution {
 public:
-    long long f ( int index, vector <vector<int>> &questions,vector <long long> &dp ){
-        if ( index >= questions.size()) return 0; 
-        if ( dp[index]!= -1) return dp[index];
-        long long  pick = 0 ;
-        pick = questions[index][0] + f(index + questions[index][1] + 1, questions,dp);
-        
-        long long  non_pick =  0 + f( index+1,  questions,dp);
-        return dp[index] = max ( pick , non_pick);
-
-    }
     long long mostPoints(vector<vector<int>>& questions) {
-        vector <long long> dp (  questions.size(), -1);
+        int n = questions.size();
+        vector <long long> dp (  n+1,0);
+        
+        for ( int i = n-1  ; i >= 0 ; i--){
+            
+            long long pick  = questions[i][0] ;
+            if (i + questions[i][1] + 1  <= n -1)
+                pick += dp[i + questions[i][1] + 1];
 
-        return f ( 0, questions,dp );
+           
+            long long  non_pick =  dp[i+1] ;
+                
+            dp[i] = max ( pick , non_pick);            
+        }
+
+        return dp[0];
     }
 };
